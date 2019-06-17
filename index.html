@@ -1,0 +1,65 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="src/css/main.css">
+  
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+
+  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+  <script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
+  <!-- <script language="javascript" type="text/javascript" src="Cares_plus_ronds.js"></script> -->
+  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
+
+
+
+  <!-- This line removes any default padding and style.
+       You might only need one of these values set. -->
+  <style> body { padding: 0; margin: 0; } </style>
+  
+</head>
+
+<body>
+  <div class="block lasagna">
+
+    <!-- <p> -->
+      <div class="tool-bar-element ">
+
+        <button class="button is-link normal-button" id="change_seed">Change seed</button>
+      </div>
+    <!-- </p> -->
+    <!-- <p> -->
+      <div class="tool-bar-element">
+
+        <button class="button is-link normal-button" id="save_img">Save to Png</button>
+      </div>
+      <div class="tool-bar-element">
+          <div class="field has-addons tool-bar-element">
+            <div class="control">
+              <input class="input" type="text" id="save_str" onkeypress="pressEnter(event, 'save_ok')" placeholder="Export Name">
+            </div>
+            <div class="control">
+              <a class="button is-link" id="save_ok">
+                Save
+              </a>
+            </div>
+          </div>
+        </div>
+
+      <div class="tool-bar-element">
+        <div class="field has-addons tool-bar-element">
+          <div class="control">
+            <input class="input" type="text" id="color_str" onkeypress="pressEnter(event, 'color_ok')" placeholder="Color background">
+          </div>
+          <div class="control">
+            <a class="button is-link" id="color_ok">
+              Ok
+            </a>
+          </div>
+        </div>
+      </div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script language="javascript" type="text/javascript" src="Cares_plus_ronds.js"></script>
+</body>
+</html>
