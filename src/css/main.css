@@ -1,0 +1,42 @@
+
+html, body {
+    height: 100%;
+}
+  
+body {
+    /* margin: 0; */
+    /* display: flex; */
+    
+    /* This centers our sketch horizontally. */
+    /* justify-content: center; */
+    
+    /* This centers our sketch vertically. */
+    /* align-items: center; */
+}
+.lasagna {
+    /* z-index: 999; */
+    /* float: right; */
+    right: 0;
+    position: fixed;
+
+}
+
+/* .button {
+    margin-bottom: 5px;
+    width: 140px;
+} */
+
+/* .color-test #color_name #change_color_ok{
+    margin:0 auto;
+    float: right;
+} */
+
+.tool-bar-element {
+    margin-bottom: 5px;
+    width: 200px;
+}
+
+.normal-button {
+    width: 200px;
+}
+
