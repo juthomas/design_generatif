@@ -39,13 +39,30 @@ body {
 
 #zoom_info {
     min-height: 36px;
-
+    font-size: 15px;
 }
 
 .has-background-red {
     /* color: brown; */
     /* color:	hsl(348, 100%, 61%); */
     background-color: hsl(348, 100%, 50%);;
+}
+
+#color_background_notification {
+    width: 200px;
+    margin-top: -5px;
+    max-height: 55px;
+    font-size: 15px;
+    padding : 5px;
+    padding-left: 10px;
+    /* float: right; */
+    /* margin-left: 140px; */
+    /* float: right; */
+    display: none;
+    
+}
+
+#custom_cross {
 }
 
 .zoom-button {

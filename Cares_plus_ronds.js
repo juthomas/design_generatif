@@ -1,48 +1,20 @@
-// P_2_1_2_04
-//
-// Generative Gestaltung – Creative Coding im Web
-// ISBN: 978-3-87439-902-9, First Edition, Hermann Schmidt, Mainz, 2018
-// Benedikt Groß, Hartmut Bohnacker, Julia Laub, Claudius Lazzeroni
-// with contributions by Joey Lee and Niels Poldervaart
-// Copyright 2018
-//
-// http://www.generative-gestaltung.de
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+////////////////// PURE WEB PART
 
-/**
- * moving corners of rectangles in a grid
- *
- * MOUSE
- * position x          : corner position offset x
- * position y          : corner position offset y
- * left click          : random position
- *
- * KEYS
- * s                   : save png
- */
-//'use strict';
-
-// PURE WEB PART
+/* Fonction pour transformer l'appui sur la touche entree en clic sur un bouton */
 
 function pressEnter(event, clicfunc)
 {
+    // pour s'adapter a tous les navigateurs
     var code = event.which || event.keyCode; 
-    print(code);
-    if (code == 13) { //le code de la touche Enter
+    //le code de la touche Enter
+    if (code == 13) { 
         document.getElementById(clicfunc).click();
     }
 }
 
+/* Boucle pour le zoom */
+
 var interval;
-//startLoop();
 
 function startLoop(zoom_pow) {
     loopy(zoom_pow)
@@ -55,97 +27,167 @@ function stopLoop(){
 
 function loopy(zoom_pow) {
     console.log( "dans la boucle ");
-    //createCanvas(canvas_size, canvas_size);
-    canvas_size += zoom_pow;
+    if (canvas_size > 0 || zoom_pow > 0)
+    {
+        canvas_size += zoom_pow;
+    }
     $('#zoom_info').text(canvas_size + " * " + canvas_size + " px");
-    //createCanvas(canvas_size, canvas_size); 
+    customdraw();
+
 }
+
+/* Fonctions qui ont besoin que la page soit chargee pour fonctionner */
 
 $(document).ready(function() {
     console.log( "document ready!" );
+   
+/* Bouton changer de seed */
+    
+    // Lorsque l'on appuie sur le bouton 'Change seed'
+    // actualise la seed et redraw
+
     $('#change_seed').click(function(){
         actRandomSeed = random(100000);
+        customdraw();
     });
+
+/* Bouton sauvegarde */
+
+    // Lorsque l'on appuie sur le bouton 'Save to Png'
+    // sauvegarde le canvas en 'bar_code.png'
+
+    $('#save_img').click(function(){
+        saveCanvas("bar_code", 'png');
+    });
+    
+/* Input sauvegarde */
+    
+    // Lorsque l'on appuie sur le bouton 'Save' de la l'export du png ou que l'on appuie sur la 
+    // touche entrer, si la string entree est vide met la couleur rouge au cadre de l'input
+    // sinon sauvegarde le canvas avec le nom donné (+.png)
+
     $('#save_ok').click(function(){
-       // saveCanvas("bar_code", 'png');
         if ($('#save_str').val() == '')
         {
+        console.log( "ca met");
+
             $('#save_str').addClass('is-danger'); 
         }
         else
         {
             saveCanvas($('#save_str').val(), 'png');
         }
+    });
+
+    // Lorsque l'on focus l'input du nom de l'export
+    // enleve la couleur rouge du cadre de l'input
+
+    $('#save_str').click(function(){
+             $('#save_str').removeClass('is-danger'); 
+     });
     
-    });
-    $('#save_img').click(function(){
-        saveCanvas("bar_code", 'png');
-    });
-    $('#color_str').change(function(){
-        if ($('#color_str').val() != '')
+    // A chaque touche appuyee verifie si la string de l'input n'est pas vide,
+    // si elle n'est pas vide enleve la couleur rouge du cadre de l'input
+    // sinon met la couleur rouge au cadre de l'input
+
+     $('#save_str').keyup(function(){
+        if ($('#save_str').val() != '')
         {
-            $('#color_str').removeClass('is-danger'); 
+             $('#save_str').removeClass('is-danger'); 
+        }
+        else
+        {
+            $('#save_str').addClass('is-danger'); 
+        }
+     });
+
+
+/* Boutons Zoom */
+
+    // Quand la souris appuie sur le bouton 'Zoom' lance une boucle dont le cycle
+    // est de 100 ms, chaque cycle augmente la taille du canvas de 10
+    
+    $("#zoom_in").mousedown(function() {
+        if (!interval) {
+            startLoop(10);
+        }
+    });
+    
+    // Quand la souris arrete d'appuyer sur le bouton 'zoom'
+    // la boucle s'arrete
+    
+    $("#zoom_in").mouseup(stopLoop);
+
+    // Quand la souris appuie sur le bouton 'Dezoom' lance une boucle dont le cycle
+    // est de 100 ms, chaque cycle diminue la taille du canvas de 10
+
+    $("#zoom_out").mousedown(function() {
+        if (!interval) {
+            startLoop(-10);
         }
     });
 
+    // Quand la souris arrete d'appuyer sur le bouton 'zoom'
+    // la boucle s'arrete
 
-    
-    $("#zoom_in").mouseup(stopLoop);
-    $("#zoom_in").mousedown(function() {
-        console.log( "ca clic la ");
-      
-        if (!interval) {
-        startLoop(10);
-      }
-    });
     $("#zoom_out").mouseup(stopLoop);
-    $("#zoom_out").mousedown(function() {
-        console.log( "ca clic la ");
-      
-        if (!interval) {
-        startLoop(-10);
-      }
+
+
+
+
+/* Input couleur et notification d'erreur */
+
+    // A chaque touche appuyee verifie si la string entree correspond
+    // a la syntaxe d'une couleur
+    // si oui enleve la notification et la couleur rouge du cadre de l'input
+    // sinon met la couleur rouge au cadre de l'input
+
+    $('#color_str').keyup(function(){
+        if (reg.test($('#color_str').val()))
+        {
+            $('#color_str').removeClass('is-danger'); 
+            $("#color_background_notification").hide(100);
+
+            // Pour actualiser des que la string est correcte
+
+            currentbackground = '#' + $('#color_str').val();
+            customdraw();
+        }
+        else
+        {
+            $('#color_str').addClass('is-danger');
+        }
     });
 
+    // Lorsque l'on appuie sur la croix de la notification,
+    // ferme celle-ci et enleve la couleur rouge du cadre de l'input
+    
+    $('#color_background_notification_cross').click(function(){
+        $('#color_str').removeClass('is-danger'); 
+        $("#color_background_notification").hide(100);
+    });
 
-
-    // $('#zoom_in').mousedown(function(){
-    //     //canvas_size += 10;
-    //     //createCanvas(canvas_size, canvas_size);
-    //     mouse_pressed = true;
-
-    // });
-
-    // $('#zoom_in').mouseup(function(){
-    //     //canvas_size += 10;
-    //     //createCanvas(canvas_size, canvas_size);
-    //     console.log( "mouse up !");
-        
-    //     mouse_pressed = false;
-    // });
-
-    // $('#zoom_out').click(function(){
-    //     canvas_size -= 10;
-    //     createCanvas(canvas_size, canvas_size);    
-    // });
+    // Lorsque l'on appuie sur le bouton 'Ok' de la couleur ou que l'on appuie sur la 
+    // touche entrer verifie si la string entree correspond
+    // a la syntaxe d'une couleur, si elle ne correpond pas
+    // affiche une notification d'erreur et met la couleur rouge du cadre de l'input
 
     $('#color_ok').click(function(){
-    console.log( "document ready!" +  $('#color_str').val());
-
-        // background('#' + $('#color_str').val());
-        background("#000000");
-        if ($('#color_str').val() == '')
+        if (!reg.test($('#color_str').val()))
         {
-            $('#color_str').addClass('is-danger'); 
+            $('#color_str').addClass('is-danger');
+
+            $("#color_background_notification").show(100);
         }
         else
         {
             currentbackground = '#' + $('#color_str').val();
+            customdraw();
         }
     });
 });
 
-// PURE WEB PART
+//////////////////// PURE WEB PART
 
 
 function sleep(milliseconds) {
@@ -197,6 +239,7 @@ var rectSize = 30;
 var circleAlpha = 130;
 var circleColor;
 
+var reg = new  RegExp('^[a-fA-F0-9]{6}$');
 
 
 
@@ -210,13 +253,17 @@ function setup() {
     noStroke();
     
     background(backgroundRed, backgroundGreen, backgroundBlue);
+    customdraw();
 }
 
-function draw() {
+function customdraw() {
+    console.log( "Updating canvas");
+    //console.log( "regex : " + reg.test('232222'));
+
     clear();
     randomSeed(actRandomSeed);
-    background(currentbackground);
     createCanvas(canvas_size, canvas_size);
+    background(currentbackground);
 
 
 
@@ -290,6 +337,6 @@ function draw() {
 //     actRandomSeed = random(100000);
 // }
 
-function keyReleased() {
-    if (key == 's' || key == 'S') saveCanvas("bar_code", 'png');
-}
+// function keyReleased() {
+//     if (key == 's' || key == 'S') saveCanvas("bar_code", 'png');
+// }
