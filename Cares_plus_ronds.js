@@ -41,6 +41,26 @@ function pressEnter(event, clicfunc)
     }
 }
 
+var interval;
+//startLoop();
+
+function startLoop(zoom_pow) {
+    loopy(zoom_pow)
+    interval = setInterval(loopy, 100, zoom_pow);
+}
+
+function stopLoop(){
+  interval = clearInterval(interval);
+}
+
+function loopy(zoom_pow) {
+    console.log( "dans la boucle ");
+    //createCanvas(canvas_size, canvas_size);
+    canvas_size += zoom_pow;
+    $('#zoom_info').text(canvas_size + " * " + canvas_size + " px");
+    //createCanvas(canvas_size, canvas_size); 
+}
+
 $(document).ready(function() {
     console.log( "document ready!" );
     $('#change_seed').click(function(){
@@ -67,6 +87,48 @@ $(document).ready(function() {
             $('#color_str').removeClass('is-danger'); 
         }
     });
+
+
+    
+    $("#zoom_in").mouseup(stopLoop);
+    $("#zoom_in").mousedown(function() {
+        console.log( "ca clic la ");
+      
+        if (!interval) {
+        startLoop(10);
+      }
+    });
+    $("#zoom_out").mouseup(stopLoop);
+    $("#zoom_out").mousedown(function() {
+        console.log( "ca clic la ");
+      
+        if (!interval) {
+        startLoop(-10);
+      }
+    });
+
+
+
+    // $('#zoom_in').mousedown(function(){
+    //     //canvas_size += 10;
+    //     //createCanvas(canvas_size, canvas_size);
+    //     mouse_pressed = true;
+
+    // });
+
+    // $('#zoom_in').mouseup(function(){
+    //     //canvas_size += 10;
+    //     //createCanvas(canvas_size, canvas_size);
+    //     console.log( "mouse up !");
+        
+    //     mouse_pressed = false;
+    // });
+
+    // $('#zoom_out').click(function(){
+    //     canvas_size -= 10;
+    //     createCanvas(canvas_size, canvas_size);    
+    // });
+
     $('#color_ok').click(function(){
     console.log( "document ready!" +  $('#color_str').val());
 
@@ -86,6 +148,16 @@ $(document).ready(function() {
 // PURE WEB PART
 
 
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
+  }
+
+var mouse_pressed = false;
 
 
 var tileCount = 20;
@@ -93,6 +165,8 @@ var actRandomSeed = 0;
 
 var mousePosX = 100;
 var mousePosY = 100;
+
+var canvas_size = 1000;
 
 var currentbackground = "#000000";
 
@@ -129,7 +203,9 @@ var circleColor;
 
 
 function setup() {
-    createCanvas(1000, 1000);
+    createCanvas(canvas_size, canvas_size);
+    // canvas.height = 1000;
+    // canvas.width = 1000;
     colorMode(RGB, 255, 255, 255, 255);
     noStroke();
     
@@ -140,6 +216,9 @@ function draw() {
     clear();
     randomSeed(actRandomSeed);
     background(currentbackground);
+    createCanvas(canvas_size, canvas_size);
+
+
 
     var largeur_bis = 70;
     

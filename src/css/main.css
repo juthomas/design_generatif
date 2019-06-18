@@ -34,8 +34,25 @@ body {
 .tool-bar-element {
     margin-bottom: 5px;
     width: 200px;
+    /* min-height: 36px; */
 }
 
+#zoom_info {
+    min-height: 36px;
+
+}
+
+.has-background-red {
+    /* color: brown; */
+    /* color:	hsl(348, 100%, 61%); */
+    background-color: hsl(348, 100%, 50%);;
+}
+
+.zoom-button {
+    margin-bottom: -5px;
+
+    width: 100px;
+}
 .normal-button {
     width: 200px;
 }
